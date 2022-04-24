@@ -2,11 +2,8 @@
 
 namespace BookLibray.Models.Dtos.Author
 {
-    public class AuthorReadOnlyDto
+    public class AuthorReadOnlyDto : BaseDto
     {
-        [Required]
-        public int Id { get; set; }
-
         [Required]
         [StringLength(50)]
         public string FirstName { get; set; }
