@@ -1,9 +1,11 @@
 using BookLibrary.Configurations;
 using BookLibrary.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
-
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +42,25 @@ builder.Services.AddCors(options =>
 });
 
 
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidAudience = builder.Configuration["JwtSettings:Audience"],
+        ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"])),
+        ValidateAudience = true,
+        ValidateIssuer = true,
+        ValidateIssuerSigningKey = true,
+        ValidateLifetime = true,
+        ClockSkew = TimeSpan.Zero,
+    };
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -53,6 +74,9 @@ app.UseHttpsRedirection();
 
 // Applying CORS POLICY
 app.UseCors("AllowAll");
+
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllers();
