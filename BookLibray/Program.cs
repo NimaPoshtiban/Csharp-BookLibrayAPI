@@ -1,5 +1,6 @@
 using BookLibrary.Configurations;
 using BookLibrary.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -14,6 +15,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(opt =>
     opt.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
 });
 
+//  adding Identity EF Core
+builder.Services.AddIdentityCore<IdentityUser>()
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>();
 
 // auto mapper config 
 builder.Services.AddAutoMapper(typeof(AutoMapperConfig));
@@ -24,14 +29,14 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // serilog config
-builder.Host.UseSerilog((context,loggingConf)=>loggingConf.WriteTo.Console().ReadFrom.Configuration(context.Configuration));
+builder.Host.UseSerilog((context, loggingConf) => loggingConf.WriteTo.Console().ReadFrom.Configuration(context.Configuration));
 
 
 // CORS POLICY
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(
-    "AllowAll", opt => opt.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin()) ; 
+    "AllowAll", opt => opt.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin());
 });
 
 
