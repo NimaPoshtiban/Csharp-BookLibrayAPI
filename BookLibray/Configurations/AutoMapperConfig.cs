@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using BookLibray.Data;
-using BookLibray.Models.Dtos.Author;
-using BookLibray.Models.Dtos.Book;
+using BookLibrary.Data;
+using BookLibrary.Models.Dtos.Author;
+using BookLibrary.Models.Dtos.Book;
 
-namespace BookLibray.Configurations
+namespace BookLibrary.Configurations
 {
     public class AutoMapperConfig : Profile
     {

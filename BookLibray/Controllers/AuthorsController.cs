@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using BookLibray.Data;
-using BookLibray.Models.Dtos.Author;
+using BookLibrary.Data;
+using BookLibrary.Models.Dtos.Author;
 using AutoMapper;
 
-namespace BookLibray.Controllers
+namespace BookLibrary.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

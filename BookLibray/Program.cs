@@ -1,5 +1,5 @@
-using BookLibray.Configurations;
-using BookLibray.Data;
+using BookLibrary.Configurations;
+using BookLibrary.Data;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 

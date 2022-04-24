@@ -1,4 +1,4 @@
-﻿namespace BookLibray.Models.Dtos
+﻿namespace BookLibrary.Models.Dtos
 {
     public abstract class BaseDto
     {

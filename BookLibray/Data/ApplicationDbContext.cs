@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
 
-namespace BookLibray.Data
+namespace BookLibrary.Data
 {
     public partial class ApplicationDbContext : DbContext
     {

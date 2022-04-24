@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "BookLibray": {
+    "BookLibrary": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",

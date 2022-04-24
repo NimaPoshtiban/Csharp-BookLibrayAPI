@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BookLibray.Models.Dtos.Author
+namespace BookLibrary.Models.Dtos.Author
 {
     public class AuthorUpdateDto : BaseDto
     {

@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace BookLibray.Migrations
+namespace BookLibrary.Migrations
 {
     public partial class Initial : Migration
     {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BookLibray.Models.Dtos.Book
+namespace BookLibrary.Models.Dtos.Book
 {
     public class BookReadOnlyDto : BaseDto
     {
