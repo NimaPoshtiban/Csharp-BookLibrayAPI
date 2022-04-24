@@ -1,6 +1,8 @@
+using BookLibray.Configurations;
 using BookLibray.Data;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(opt =>
     opt.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
 });
 
+
+// auto mapper config 
+builder.Services.AddAutoMapper(typeof(AutoMapperConfig));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
