@@ -1,10 +1,12 @@
 using BookLibray.Data;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+// adding ApplicationDbContext to DI Container
 builder.Services.AddDbContext<ApplicationDbContext>(opt =>
 {
     opt.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
@@ -16,7 +18,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// adding ApplicationDbContext to DI Container
+// serilog config
+builder.Host.UseSerilog((context,loggingConf)=>loggingConf.WriteTo.Console().ReadFrom.Configuration(context.Configuration));
 
 
 // CORS POLICY
