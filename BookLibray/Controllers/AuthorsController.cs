@@ -9,11 +9,13 @@ using Microsoft.EntityFrameworkCore;
 using BookLibrary.Data;
 using BookLibrary.Models.Dtos.Author;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookLibrary.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class AuthorsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -68,6 +70,7 @@ namespace BookLibrary.Controllers
         // PUT: api/Authors/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> PutAuthor(int id, AuthorUpdateDto authorDto)
         {
             if (id != authorDto.Id)
@@ -106,6 +109,8 @@ namespace BookLibrary.Controllers
         // POST: api/Authors
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(Roles = "Admin")]
+
         public async Task<ActionResult<Author>> PostAuthor(AuthorCreateDto authorDto)
         {
             try
@@ -124,6 +129,7 @@ namespace BookLibrary.Controllers
 
         // DELETE: api/Authors/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteAuthor(int id)
         {
 

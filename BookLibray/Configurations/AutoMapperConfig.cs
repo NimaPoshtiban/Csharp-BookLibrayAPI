@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using BookLibrary.Data;
+using BookLibrary.Models.Dtos.Auth;
 using BookLibrary.Models.Dtos.Author;
 using BookLibrary.Models.Dtos.Book;
+using Microsoft.AspNetCore.Identity;
 
 namespace BookLibrary.Configurations
 {
@@ -15,9 +17,9 @@ namespace BookLibrary.Configurations
             CreateMap<Book, BookReadOnlyDto>()
                .ForMember(a => a.AuthorName, d => d.MapFrom(map => $"{map.Author.FirstName} {map.Author.LastName}"))
                .ReverseMap();
-            CreateMap<BookCreateDto,Book>().ReverseMap();
+            CreateMap<BookCreateDto, Book>().ReverseMap();
             CreateMap<BookUpdateDto, Book>().ReverseMap();
-
+            CreateMap<IdentityUser, AuthUserDto>().ReverseMap();
         }
     }
 }
