@@ -1,5 +1,7 @@
 using BookLibrary.Configurations;
 using BookLibrary.Data;
+using BookLibrary.Data.Repository;
+using BookLibrary.Data.Repository.IRepository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -33,6 +35,9 @@ builder.Services.AddSwaggerGen();
 // serilog config
 builder.Host.UseSerilog((context, loggingConf) => loggingConf.WriteTo.Console().ReadFrom.Configuration(context.Configuration));
 
+
+// regitering UnitOfWork
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // CORS POLICY
 builder.Services.AddCors(options =>

@@ -10,6 +10,7 @@ using BookLibrary.Data;
 using BookLibrary.Models.Dtos.Author;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using BookLibrary.Data.Repository.IRepository;
 
 namespace BookLibrary.Controllers
 {
@@ -18,13 +19,13 @@ namespace BookLibrary.Controllers
     [Authorize]
     public class AuthorsController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ILogger<AuthorsController> _logger;
 
-        public AuthorsController(ApplicationDbContext context, IMapper mapper, ILogger<AuthorsController> logger)
+        public AuthorsController(IUnitOfWork unitOfWork, IMapper mapper, ILogger<AuthorsController> logger)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
             _logger = logger;
         }
@@ -35,7 +36,7 @@ namespace BookLibrary.Controllers
         {
             try
             {
-                var authors = _mapper.Map<IEnumerable<AuthorReadOnlyDto>>(await _context.Authors.ToListAsync());
+                var authors = _mapper.Map<IEnumerable<AuthorReadOnlyDto>>(await _unitOfWork.Authors.GetAllAsync());
                 return Ok(authors);
             }
             catch (Exception ex)
@@ -51,7 +52,7 @@ namespace BookLibrary.Controllers
         {
             try
             {
-                var author = _mapper.Map<AuthorReadOnlyDto>(await _context.Authors.FindAsync(id));
+                var author = _mapper.Map<AuthorReadOnlyDto>(await _unitOfWork.Authors.GetAsync(id));
 
                 if (author == null)
                 {
@@ -78,18 +79,17 @@ namespace BookLibrary.Controllers
                 return BadRequest();
             }
 
-            var author = await _context.Authors.FindAsync(authorDto.Id);
+            var author = await _unitOfWork.Authors.GetAsync(authorDto.Id);
             if (author == null)
             {
                 return NotFound();
             }
 
             _mapper.Map(authorDto, author);
-            _context.Entry(author).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _unitOfWork.Authors.UpdateAsync(author);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -111,13 +111,12 @@ namespace BookLibrary.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin")]
 
-        public async Task<ActionResult<Author>> PostAuthor(AuthorCreateDto authorDto)
+        public async Task<ActionResult<AuthorCreateDto>> PostAuthor(AuthorCreateDto authorDto)
         {
             try
             {
                 var author = _mapper.Map<Author>(authorDto);
-                await _context.Authors.AddAsync(author);
-                await _context.SaveChangesAsync();
+                await _unitOfWork.Authors.AddAsync(author);
                 return CreatedAtAction(nameof(GetAuthor), new { id = author.Id }, author);
             }
             catch (Exception ex)
@@ -135,14 +134,13 @@ namespace BookLibrary.Controllers
 
             try
             {
-                var author = await _context.Authors.FindAsync(id);
+                var author = await _unitOfWork.Authors.GetAsync(id);
                 if (author == null)
                 {
                     return NotFound();
                 }
 
-                _context.Authors.Remove(author);
-                await _context.SaveChangesAsync();
+                await _unitOfWork.Authors.DeleteAsync(id);
             }
             catch (Exception ex)
             {
@@ -154,7 +152,7 @@ namespace BookLibrary.Controllers
 
         private async Task<bool> AuthorExists(int id)
         {
-            return await _context.Authors.AnyAsync(e => e.Id == id);
+            return await _unitOfWork.Authors.Exists(id);
         }
     }
 }

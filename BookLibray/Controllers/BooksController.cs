@@ -11,6 +11,7 @@ using AutoMapper;
 using BookLibrary.Models.Dtos.Book;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
+using BookLibrary.Data.Repository.IRepository;
 
 namespace BookLibrary.Controllers
 {
@@ -19,13 +20,13 @@ namespace BookLibrary.Controllers
     [Authorize]
     public class BooksController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ILogger<BooksController> _logger;
 
-        public BooksController(ApplicationDbContext context, IMapper mapper, ILogger<BooksController> logger)
+        public BooksController(IUnitOfWork unitOfWork, IMapper mapper, ILogger<BooksController> logger)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
             _logger = logger;
         }
@@ -36,9 +37,7 @@ namespace BookLibrary.Controllers
         {
             try
             {
-                var books = await _context.Books.Include(a => a.Author)
-                    .ProjectTo<BookReadOnlyDto>(_mapper.ConfigurationProvider)
-                    .ToListAsync();
+                var books = await _unitOfWork.Books.GetAllBooksAsync();
 
                 return Ok(books);
             }
@@ -51,7 +50,7 @@ namespace BookLibrary.Controllers
 
         // GET: api/Books/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<BookReadOnlyDto>> GetBook(int id)
+        public async Task<ActionResult<BookDetailsDto>> GetBook(int id)
         {
             try
             {
@@ -60,10 +59,7 @@ namespace BookLibrary.Controllers
                     return BadRequest();
                 }
 
-                var book = await _context.Books
-                    .Include(a => a.Author)
-                    .ProjectTo<BookReadOnlyDto>(_mapper.ConfigurationProvider)
-                    .FirstOrDefaultAsync(a => a.Id == id);
+                var book = await _unitOfWork.Books.GetBookAsync(id);
 
                 if (book == null)
                 {
@@ -92,18 +88,18 @@ namespace BookLibrary.Controllers
                 return BadRequest();
             }
 
-            var book = await _context.Books.FindAsync(bookDto.Id);
+            var book = await _unitOfWork.Books.GetAsync(bookDto.Id);
 
             if (book == null)
             {
                 return BadRequest();
             }
             _mapper.Map(bookDto, book);
-            _context.Entry(book).State = EntityState.Modified;
+
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _unitOfWork.Books.UpdateAsync(book);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -136,8 +132,8 @@ namespace BookLibrary.Controllers
 
                 var book = _mapper.Map<Book>(bookDto);
 
-                await _context.Books.AddAsync(book);
-                await _context.SaveChangesAsync();
+                await _unitOfWork.Books.AddAsync(book);
+
 
                 return CreatedAtAction(nameof(GetBook), new { id = book.Id }, book);
             }
@@ -155,14 +151,13 @@ namespace BookLibrary.Controllers
         {
             try
             {
-                var book = await _context.Books.FindAsync(id);
+                var book = await _unitOfWork.Books.GetAsync(id);
                 if (book == null)
                 {
                     return NotFound();
                 }
 
-                _context.Books.Remove(book);
-                await _context.SaveChangesAsync();
+                await _unitOfWork.Books.DeleteAsync(id);
 
                 return NoContent();
             }
@@ -175,7 +170,7 @@ namespace BookLibrary.Controllers
 
         private async Task<bool> BookExists(int id)
         {
-            return await _context.Books.AnyAsync(e => e.Id == id);
+            return await _unitOfWork.Books.Exists(id);
         }
     }
 }
