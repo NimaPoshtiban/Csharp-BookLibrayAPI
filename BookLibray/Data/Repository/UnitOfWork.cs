@@ -12,7 +12,7 @@ namespace BookLibrary.Data.Repository
         {
             _mapper = mapper;
             _context = context;
-            Authors = new AuthorsRepository(_context);
+            Authors = new AuthorsRepository(_context,_mapper);
             Books = new BooksRepository(_context,_mapper);
         }
         public IAuthorsRepository Authors { get;private set; }
