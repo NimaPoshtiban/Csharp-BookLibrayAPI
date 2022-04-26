@@ -4,17 +4,16 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>6372c0cf-6883-4e4b-bf33-15707ab85d4a</UserSecretsId>
+    <UserSecretsId>1c3ed68a-6cc6-466f-a3f6-de2827776b32</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.4" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\Base\" />
+    <Folder Include="Views\Users\" />
   </ItemGroup>
 
 </Project>
