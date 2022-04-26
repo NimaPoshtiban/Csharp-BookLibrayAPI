@@ -77,8 +77,8 @@ DELETE /api/Authors/{id}
 **Logger:** Serilog
 
 ### How to use
-
+By default you can only register with a user role.
+<br/>
 any modification requires you to be in Admin Role.
 So you should manually add admin role and admin user.
-
 
