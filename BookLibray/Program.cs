@@ -46,7 +46,6 @@ builder.Services.AddCors(options =>
     "AllowAll", opt => opt.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin());
 });
 
-
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -65,6 +64,8 @@ builder.Services.AddAuthentication(options =>
         ClockSkew = TimeSpan.Zero,
     };
 });
+
+
 
 var app = builder.Build();
 

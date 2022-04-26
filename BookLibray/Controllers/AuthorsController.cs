@@ -48,11 +48,11 @@ namespace BookLibrary.Controllers
 
         // GET: api/Authors/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<AuthorDetailsDto>> GetAuthor(int id)
+        public async Task<ActionResult<AuthorReadOnlyDto>> GetAuthor(int id)
         {
             try
             {
-                var author = _unitOfWork.Authors.GetAuthorDetailsAsync(id);
+                var author = _mapper.Map<AuthorReadOnlyDto>(await _unitOfWork.Authors.GetAsync(id));
 
                 if (author == null)
                 {
