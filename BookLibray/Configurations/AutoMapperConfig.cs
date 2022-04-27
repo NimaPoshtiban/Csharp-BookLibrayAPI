@@ -21,6 +21,7 @@ namespace BookLibrary.Configurations
                .ReverseMap();
             CreateMap<BookCreateDto, Book>().ReverseMap();
             CreateMap<BookUpdateDto, Book>().ReverseMap();
+            CreateMap<Book, BookDetailsDto>().ReverseMap();
             CreateMap<IdentityUser, AuthUserDto>().ReverseMap();
         }
     }
