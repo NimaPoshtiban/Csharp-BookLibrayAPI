@@ -52,7 +52,7 @@ namespace BookLibrary.Controllers
         {
             try
             {
-                var author = await _unitOfWork.Authors.GetAuthorDetailsAsync(id);/* _mapper.Map<AuthorReadOnlyDto>(await _unitOfWork.Authors.GetAsync(id));*/
+                var author = await _unitOfWork.Authors.GetAuthorDetailsAsync(id);
 
                 if (author == null)
                 {
