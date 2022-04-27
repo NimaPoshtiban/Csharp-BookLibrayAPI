@@ -27,9 +27,9 @@ namespace BookLibrary.Data.Repository
         public async Task<BookDetailsDto> GetBookAsync(int id)
         {
             return await context.Books
-                .Include(a=>a.Author)
-                .ProjectTo<BookDetailsDto>(mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync(q=>q.Id== id); 
+                ?.Include(a=>a.Author)
+                ?.ProjectTo<BookDetailsDto>(mapper.ConfigurationProvider)
+                ?.FirstOrDefaultAsync(q=>q.Id== id); 
         }
     }
 }
